@@ -5,15 +5,22 @@ use AthenaEvs\Client;
 
 final class General extends TestCase
 {
-    public function testCanBeCreatedFromValidEmail(): void
+    public function testJustWorks(): void
     {
-        $client = new Client;
-        echo "Hello world";
+        echo "Hello world\n";
+
+
+        $client = new Client($api = 'xxxxxxxxxxxxxxxxxxxxx');
+        $response = $client->verify('hello@example.jp');
+
+
         $this->assertSame(1, 1);
     }
 
-    public function testCannotBeCreatedFromInvalidEmail(): void
+    public function testAnotherCase(): void
     {
+        // code here
+
         $this->assertTrue(true);
     }
 }
