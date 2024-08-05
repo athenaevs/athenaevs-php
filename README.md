@@ -28,7 +28,7 @@ $response = $client->verify('hello@example.jp');
 
 print_r( $response ); // something like [ 'success' => true, 'result' => 'deliverable' ]
 ```
-See [our API Documentation](https://www.google.com) for the details of request / response format.
+See [our API Documentation](https://api.athenaevs.com) for the details of request / response format.
 
 # Batch verification
 You can also verify a batch of multiple emails address within a single API request as follows
