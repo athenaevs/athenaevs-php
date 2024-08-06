@@ -1,7 +1,8 @@
-# Oveview
-Athena EVS helps verifies the validity and deliverability of an email address. We ensure that email addresses in your list are accurate and active, which helps improve email marketing campaigns, reduce bounce rates, and maintain a clean email list.
+# Athena EVS
+[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://athenaevs.com/images/athena_evs_logo.svg?v=1)
 
-Here are the key functions of Athena EVS:
+# Oveview
+Athena EVS helps verifies the validity and deliverability of an email address. We ensure that email addresses in your list are accurate and active, which helps improve email marketing campaigns, reduce bounce rates, and maintain a clean email list. Here are the key functions of Athena EVS:
 
 - **Syntax Check**: Validates the format of an email address according to standard email syntax rules.
 - **Domain Check**: Verifies that the domain of the email address (e.g., gmail.com) exists and can receive emails.
@@ -28,8 +29,6 @@ $response = $client->verify('hello@example.jp');
 
 print_r( $response ); // something like [ 'success' => true, 'result' => 'deliverable' ]
 ```
-See [our API Documentation](https://api.athenaevs.com) for the details of request / response format.
-
 # Batch verification
 You can also verify a batch of multiple emails address within a single API request as follows
 ```php
@@ -42,5 +41,86 @@ print_r( $response ); // something like [ 'success' => true, 'batch_id' => '1000
 ```
 The batch verify API returns a batch ID. You can use this batch ID to query the verification progress
 ```php
-$client->checkProgress( 100093 )
+$response = $client->checkProgress( 100093 )
+
+// Sample results
+// [ 'status' => 'In queue', 'percentage' => 0.72 ]
 ```
+Once the verification process is complete, it will return a `complete` status and the verification results can be retrived by the GET RESULT API
+```php
+$response = $client->getResult( 100093 )
+```
+
+```php
+// Sample response
+{
+  "email_batch": [
+      {
+          "address": "valid@example.com",
+          "status": "valid",
+          "sub_status": "",
+          "free_email": false,
+          "did_you_mean": null,
+          "account": null,
+          "domain": null,
+          "domain_age_days": "9692",
+          "smtp_provider": "example",
+          "mx_found": "true",
+          "mx_record": "mx.example.com",
+          "firstname": "zero",
+          "lastname": "bounce",
+          "gender": "male",
+          "country": null,
+          "region": null,
+          "city": null,
+          "zipcode": null,
+          "processed_at": "2020-09-17 17:43:11.829"
+      },
+      {
+          "address": "invalid@example.com",
+          "status": "invalid",
+          "sub_status": "mailbox_not_found",
+          "free_email": false,
+          "did_you_mean": null,
+          "account": null,
+          "domain": null,
+          "domain_age_days": "9692",
+          "smtp_provider": "example",
+          "mx_found": "true",
+          "mx_record": "mx.example.com",
+          "firstname": "zero",
+          "lastname": "bounce",
+          "gender": "male",
+          "country": null,
+          "region": null,
+          "city": null,
+          "zipcode": null,
+          "processed_at": "2020-09-17 17:43:11.830"
+      },
+      {
+          "address": "disposable@example.com",
+          "status": "do_not_mail",
+          "sub_status": "disposable",
+          "free_email": false,
+          "did_you_mean": null,
+          "account": null,
+          "domain": null,
+          "domain_age_days": "9692",
+          "smtp_provider": "example",
+          "mx_found": "true",
+          "mx_record": "mx.example.com",
+          "firstname": "zero",
+          "lastname": "bounce",
+          "gender": "male",
+          "country": null,
+          "region": null,
+          "city": null,
+          "zipcode": null,
+          "processed_at": "2020-09-17 17:43:11.830"
+      }
+  ]
+}
+```
+See [our API Documentation](https://api.athenaevs.com) for the details of request / response format.
+# Reference
+Contact us for further assistance and cooperation at [Rencontru LTD.](https://rencontru.com)
