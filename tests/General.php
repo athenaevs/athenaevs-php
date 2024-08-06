@@ -5,22 +5,29 @@ use AthenaEvs\Client;
 
 final class General extends TestCase
 {
-    public function testJustWorks(): void
+    private function getClient()
     {
-        echo "Hello world\n";
-
-
-        $client = new Client($api = 'xxxxxxxxxxxxxxxxxxxxx');
-        $response = $client->verify('hello@example.jp');
-
-
-        $this->assertSame(1, 1);
+        return new Client($api = '9HAKsYHqWyYjil9Yrfq3pBKKSmYzmgeGhgpur3Dg4CYomgWkXy2YqzyQITbi');
     }
 
-    public function testAnotherCase(): void
+    public function testVerifyEndpointWorks(): void
     {
-        // code here
+        $email = 'zyx@gmail.com';
 
-        $this->assertTrue(true);
+        $response = $this->getClient()->verify($email);
+
+        $this->assertTrue(isset($response['email']));
+    }
+
+    public function testBatchVerifyEndpointWorks(): void
+    {
+        $emails = [
+            'zyx@yahoo.com',
+            'abc@gmail.com',
+        ];
+
+        $response = $this->getClient()->batchVerify($emails);
+
+        $this->assertTrue(isset($response['results']));
     }
 }
