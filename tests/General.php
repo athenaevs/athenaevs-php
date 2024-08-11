@@ -7,7 +7,8 @@ final class General extends TestCase
 {
     private function getClient()
     {
-        return new Client($api = '9HAKsYHqWyYjil9Yrfq3pBKKSmYzmgeGhgpur3Dg4CYomgWkXy2YqzyQITbi');
+        return new Client($api = '9HAKsYHqWyYjil9Yrfq3pBKKSmYzmgeGhgpur3Dg4CYomgWkXy2YqzyQITbi'); // athenaeves
+        // return new Client($api = 'xHJA1mkiURV5dO4IVfnr2TrcD7cAOg3iCfmO52cnnUgsEuTO7GYw262uyXsf'); // local
     }
 
     public function testVerifyASingleEmailAddress(): void
@@ -18,7 +19,7 @@ final class General extends TestCase
 
         // return [ 'status' => 'deliverable' ]
 
-        $this->assertTrue(  array_keys_exists('status', $response) );
+        $this->assertTrue(  array_key_exists('status', $response) );
     }
 
     public function testSendBatchOfEmailsForVerification(): void
@@ -30,22 +31,25 @@ final class General extends TestCase
 
         $response = $this->getClient()->batchVerify($emails);
 
-        $this->assertTrue( array_keys_exists( 'batch_id', $response ) );
+        $this->assertTrue( array_key_exists( 'batch_id', $response ) );
     }
 
     public function testGetBatchStatus(): void
     {
-        $batchId = '3982472938473928';
+        // $batchId = '66b888d715058'; // local
+        $batchId = '66b88b5ac07a2'; // server
         $response = $this->getClient()->getBatchStatus($batchId);
 
-        $this->assertTrue( $response['status'] = 'running' );
+        $this->assertTrue( array_key_exists('status', $response) );
     }
 
     public function testGetBatchResult()
     {
-        $batchId = '3982472938473928';
+        // $batchId = '66b888d715058'; // local
+        $batchId = '66b88b5ac07a2'; // server
         $response = $this->getClient()->getBatchResult($batchId);
 
-        $this->assertTrue( array_keys_exists('emails', $response) );
+        $this->assertTrue( array_key_exists('status', $response) );
+        $this->assertTrue( array_key_exists('result', $response) );
     }
 }

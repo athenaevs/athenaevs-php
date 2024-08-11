@@ -10,6 +10,7 @@ class Client
     protected $apiKey;
     protected $client;
 
+    // const BASE_URI = 'http://em.com/api/v1/';
     const BASE_URI = 'https://athenaevs.com/api/v1/';
 
     public function __construct($apiKey)
@@ -113,7 +114,37 @@ class Client
         $raw = (string)$response->getBody();
         $json = json_decode($raw, true);
 
-        // Something like [ success => true, batch_id => '100093' ]
+        return $json;
+    }
+    
+    public function getBatchStatus($batchId)
+    {
+        $response = $this->makeRequest('POST', 'batch-status', [
+            'batch_id' => $batchId,
+        ]);
+
+        if ($response->getStatusCode() != 200) {
+            throw new Exception("Error get batch status! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
+        }
+
+        $raw = (string)$response->getBody();
+        $json = json_decode($raw, true);
+
+        return $json;
+    }
+
+    public function getBatchResult($batchId)
+    {
+        $response = $this->makeRequest('POST', 'batch-result', [
+            'batch_id' => $batchId,
+        ]);
+
+        if ($response->getStatusCode() != 200) {
+            throw new Exception("Error get batch result! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
+        }
+
+        $raw = (string)$response->getBody();
+        $json = json_decode($raw, true);
 
         return $json;
     }
