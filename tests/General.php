@@ -5,6 +5,8 @@ use AthenaEvs\Client;
 
 final class General extends TestCase
 {
+    private $batchId;
+
     private function getClient()
     {
         return new Client($api = 'lzvxz9bp1zuyr7539vw6b7ftw9gha'); // athenaeves
@@ -21,8 +23,8 @@ final class General extends TestCase
 
         $this->assertTrue(  array_key_exists('status', $response) );
     }
-
-    public function testSendBatchOfEmailsForVerification(): void
+    
+    public function testSendBatchOfEmailsForVerification(): array
     {
         $emails = [
             'zyx@yahoo.com',
@@ -31,22 +33,39 @@ final class General extends TestCase
 
         $response = $this->getClient()->batchVerify($emails);
 
+        $this->batchId = $response['batch_id'];
+
         $this->assertTrue( array_key_exists( 'batch_id', $response ) );
+
+        // Return the batchId to be used in the dependent test
+        return $response;
     }
 
-    public function testGetBatchStatus(): void
+    /**
+     * @depends testSendBatchOfEmailsForVerification
+     */
+    public function testGetBatchStatus(array $response): void
     {
-        // $batchId = '66b888d715058'; // local
-        $batchId = '66b97871ebd00'; // server
+        $batchId = $response['batch_id'];
+
+        // Use the batchId stored in the previous test
+        $this->assertNotEmpty($batchId, 'Batch ID should not be empty');
+
         $response = $this->getClient()->getBatchStatus($batchId);
 
         $this->assertTrue( array_key_exists('status', $response) );
     }
 
-    public function testGetBatchResult()
+    /**
+     * @depends testSendBatchOfEmailsForVerification
+     */
+    public function testGetBatchResult(array $response): void
     {
-        // $batchId = '66b888d715058'; // local
-        $batchId = '66b97871ebd00'; // server
+        $batchId = $response['batch_id'];
+
+        // Use the batchId stored in the previous test
+        $this->assertNotEmpty($batchId, 'Batch ID should not be empty');
+        
         $response = $this->getClient()->getBatchResult($batchId);
 
         $this->assertTrue( array_key_exists('status', $response) );
