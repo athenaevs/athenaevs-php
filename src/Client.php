@@ -10,7 +10,7 @@ class Client
     protected $apiKey;
     protected $client;
 
-    // const BASE_URI = 'http://em.com/api/v1/';
+    // const BASE_URI = 'http://em.com/api/v1/'; // local
     const BASE_URI = 'https://athenaevs.com/api/v1/';
 
     public function __construct($apiKey)
@@ -26,7 +26,7 @@ class Client
                 'verify' => false,
                 'headers' => [
                     // 'Content-Type' => 'application/json',
-                    'Authorization' => "Bearer {$this->apiKey}",
+                    // 'Authorization' => "Bearer {$this->apiKey}",
                 ],
             ]);
         }
@@ -38,6 +38,12 @@ class Client
     {
         $client = $this->getClient();
 
+        // API key
+        $params = array_merge($params, [
+            'api_key' => $this->apiKey,
+        ]);
+
+        //
         try {
             $options = [
                 'headers' => [

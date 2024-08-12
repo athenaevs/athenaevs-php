@@ -7,8 +7,8 @@ final class General extends TestCase
 {
     private function getClient()
     {
-        return new Client($api = '9HAKsYHqWyYjil9Yrfq3pBKKSmYzmgeGhgpur3Dg4CYomgWkXy2YqzyQITbi'); // athenaeves
-        // return new Client($api = 'xHJA1mkiURV5dO4IVfnr2TrcD7cAOg3iCfmO52cnnUgsEuTO7GYw262uyXsf'); // local
+        return new Client($api = 'lzvxz9bp1zuyr7539vw6b7ftw9gha'); // athenaeves
+        // return new Client($api = 'cgunm52cx4h1bs6q6rqtto47w7vkh'); // local
     }
 
     public function testVerifyASingleEmailAddress(): void
