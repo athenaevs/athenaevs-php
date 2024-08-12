@@ -37,7 +37,7 @@ final class General extends TestCase
     public function testGetBatchStatus(): void
     {
         // $batchId = '66b888d715058'; // local
-        $batchId = '66b88b5ac07a2'; // server
+        $batchId = '66b97871ebd00'; // server
         $response = $this->getClient()->getBatchStatus($batchId);
 
         $this->assertTrue( array_key_exists('status', $response) );
@@ -46,7 +46,7 @@ final class General extends TestCase
     public function testGetBatchResult()
     {
         // $batchId = '66b888d715058'; // local
-        $batchId = '66b88b5ac07a2'; // server
+        $batchId = '66b97871ebd00'; // server
         $response = $this->getClient()->getBatchResult($batchId);
 
         $this->assertTrue( array_key_exists('status', $response) );
