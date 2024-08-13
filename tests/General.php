@@ -13,6 +13,16 @@ final class General extends TestCase
         // return new Client($api = 'cgunm52cx4h1bs6q6rqtto47w7vkh'); // local
     }
 
+    public function testAttemptWithInvalidKey()
+    {
+
+        $key = 'xxxxxxxxxxxxxxxx';
+
+        $this->assertEqual (  $response->getStatusCode() , 403 );
+        $this->assertEqual (  array_key_exists('error') , $response );
+
+    }
+
     public function testVerifyASingleEmailAddress(): void
     {
         $email = 'zyx@gmail.com';
@@ -23,7 +33,7 @@ final class General extends TestCase
 
         $this->assertTrue(  array_key_exists('status', $response) );
     }
-    
+
     public function testSendBatchOfEmailsForVerification(): array
     {
         $emails = [
@@ -65,7 +75,7 @@ final class General extends TestCase
 
         // Use the batchId stored in the previous test
         $this->assertNotEmpty($batchId, 'Batch ID should not be empty');
-        
+
         $response = $this->getClient()->getBatchResult($batchId);
 
         $this->assertTrue( array_key_exists('status', $response) );
