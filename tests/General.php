@@ -15,12 +15,13 @@ final class General extends TestCase
 
     public function testAttemptWithInvalidKey()
     {
+        $client = new Client($api = 'xxxx');
 
-        $key = 'xxxxxxxxxxxxxxxx';
+        $email = 'zyx@gmail.com';
 
-        $this->assertEqual (  $response->getStatusCode() , 403 );
-        $this->assertEqual (  array_key_exists('error') , $response );
+        $response = $client->testApi($email);
 
+        $this->assertTrue($response->getResponse()->getStatusCode() == 403 );
     }
 
     public function testVerifyASingleEmailAddress(): void

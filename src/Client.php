@@ -71,22 +71,37 @@ class Client
             // Output the data
             return $response;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            // Handle client exceptions
-            echo 'ClientException: ' . $e->getMessage() . "\n";
-            echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
-            echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+            // // Handle client exceptions
+            // echo 'ClientException: ' . $e->getMessage() . "\n";
+            // echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
+            // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+
+            return $e;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            // Handle request exceptions
-            echo 'RequestException: ' . $e->getMessage() . "\n";
-            if ($e->hasResponse()) {
-                echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
-            }
-            echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+            // // Handle request exceptions
+            // echo 'RequestException: ' . $e->getMessage() . "\n";
+            // if ($e->hasResponse()) {
+            //     echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
+            // }
+            // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+
+            return $e;
         } catch (Exception $e) {
-            // Handle all other exceptions
-            echo 'Exception: ' . $e->getMessage() . "\n";
-            echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+            // // Handle all other exceptions
+            // echo 'Exception: ' . $e->getMessage() . "\n";
+            // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
+
+            return $e;
         }
+    }
+
+    public function testApi()
+    {
+        $response = $this->makeRequest('POST', 'verify', [
+            'email' => 'abc@gmail.com',
+        ]);
+
+        return $response;
     }
 
     public function verify($email)
