@@ -7,21 +7,30 @@ final class General extends TestCase
 {
     private $batchId;
 
+    // public $apiKey = 'cgunm52cx4h1bs6q6rqtto47w7vkh'; // Local
+    public $apiKey = '2fqy45mts72m1a2uopqbx1rnlaw97'; // AthenaEVS
+
     private function getClient()
     {
-        return new Client($api = 'lzvxz9bp1zuyr7539vw6b7ftw9gha'); // athenaeves
-        // return new Client($api = 'cgunm52cx4h1bs6q6rqtto47w7vkh'); // local
+        return new Client($this->apiKey); // local
     }
 
     public function testAttemptWithInvalidKey()
     {
         $client = new Client($api = 'xxxx');
 
-        $email = 'zyx@gmail.com';
+        $response = $client->testApi();
 
-        $response = $client->testApi($email);
+        $this->assertTrue($response->getStatusCode() == 403 );
+    }
 
-        $this->assertTrue($response->getResponse()->getStatusCode() == 403 );
+    public function testAttemptWithValidKey()
+    {
+        $client = new Client($api = $this->apiKey);
+
+        $response = $client->testApi();
+
+        $this->assertTrue($response->getStatusCode() == 200 );
     }
 
     public function testVerifyASingleEmailAddress(): void
@@ -81,5 +90,12 @@ final class General extends TestCase
 
         $this->assertTrue( array_key_exists('status', $response) );
         $this->assertTrue( array_key_exists('result', $response) );
+    }
+
+    public function testGetCredits(): void
+    {
+        $response = $this->getClient()->getCredits();
+
+        $this->assertTrue( array_key_exists('credits', $response) );
     }
 }

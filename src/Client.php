@@ -55,6 +55,8 @@ class Client
             // If the method is POST, add form_params
             if (strtoupper($method) == 'POST') {
                 $options['form_params'] = $params;
+            } else if (strtoupper($method) == 'GET') {
+                $options['query'] = $params;
             }
 
             $response = $client->request($method, $uri, $options);
@@ -76,7 +78,7 @@ class Client
             // echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
             // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
 
-            return $e;
+            return $e->getResponse();
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // // Handle request exceptions
             // echo 'RequestException: ' . $e->getMessage() . "\n";
@@ -85,7 +87,7 @@ class Client
             // }
             // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
 
-            return $e;
+            return $e->getResponse();
         } catch (Exception $e) {
             // // Handle all other exceptions
             // echo 'Exception: ' . $e->getMessage() . "\n";
@@ -97,9 +99,7 @@ class Client
 
     public function testApi()
     {
-        $response = $this->makeRequest('POST', 'verify', [
-            'email' => 'abc@gmail.com',
-        ]);
+        $response = $this->makeRequest('GET', 'test', []);
 
         return $response;
     }
@@ -165,6 +165,20 @@ class Client
         }
 
         $raw = (string)$response->getBody();
+        $json = json_decode($raw, true);
+
+        return $json;
+    }
+
+    public function getCredits()
+    {
+        $response = $this->makeRequest('GET', 'get-credits');
+
+        if ($response->getStatusCode() != 200) {
+            throw new Exception("Error get batch result! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
+        }
+
+        $raw = (string) $response->getBody();
         $json = json_decode($raw, true);
 
         return $json;
