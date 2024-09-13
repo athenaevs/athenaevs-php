@@ -68,24 +68,26 @@ class Client
 
             $response = $client->request($method, $uri, $options);
 
-            // // Get the status code of the response
-            // $statusCode = $response->getStatusCode();
+            // Get the status code of the response
+            $statusCode = $response->getStatusCode();
 
-            // // Get the response body
-            // $body = $response->getBody();
+            // Get the response body
+            $body = $response->getBody();
 
-            // // Decode the JSON response if necessary
-            // $data = json_decode($body, true);
+            // Decode the JSON response if necessary
+            $data = json_decode($body, true);
 
             // Output the data
-            return $response;
+            return [$statusCode, $data];
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             // // Handle client exceptions
             // echo 'ClientException: ' . $e->getMessage() . "\n";
             // echo 'Response: ' . $e->getResponse()->getBody()->getContents() . "\n";
             // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
 
-            return $e->getResponse();
+            // return $e->getResponse();
+
+            throw new \Exception($e->getResponse()->getBody()->getContents());
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // // Handle request exceptions
             // echo 'RequestException: ' . $e->getMessage() . "\n";
@@ -94,100 +96,65 @@ class Client
             // }
             // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
 
-            return $e->getResponse();
+            // return $e->getResponse();
+            throw new \Exception($e->getResponse()->getBody()->getContents());
+            
         } catch (Exception $e) {
             // // Handle all other exceptions
             // echo 'Exception: ' . $e->getMessage() . "\n";
             // echo 'Stack Trace: ' . $e->getTraceAsString() . "\n";
 
-            return $e;
+            throw new \Exception($e->getMessage());
         }
     }
 
     public function testApi()
     {
-        $response = $this->makeRequest('GET', 'test', []);
+        list($statusCode, $data) = $this->makeRequest('GET', 'test', []);
 
-        return $response;
+        return $statusCode;
     }
 
     public function verify($email)
     {
-        $response = $this->makeRequest('POST', 'verify', [
+        list($statusCode, $data) = $this->makeRequest('POST', 'verify', [
             'email' => $email,
         ]);
 
-        if ($response->getStatusCode() != 200) {
-            throw new Exception("Error verifying email {$email}!, {$response->getStatusCode()}, {$response->getReasonPhrase()}");
-        }
-
-        $raw = (string)$response->getBody();
-        $json = json_decode($raw, true);
-
-        // Something like [ success => true, result => 'deliverable' ]
-
-        return $json;
+        return $data;
     }
 
     public function batchVerify(array $emails)
     {
-        $response = $this->makeRequest('POST', 'batch-verify', [
+        list($statusCode, $data) = $this->makeRequest('POST', 'batch-verify', [
             'emails' => $emails,
         ]);
 
-        if ($response->getStatusCode() != 200) {
-            throw new Exception("Error verifying batch of emails! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
-        }
-
-        $raw = (string)$response->getBody();
-        $json = json_decode($raw, true);
-
-        return $json;
+        return $data;
     }
     
     public function getBatchStatus($batchId)
     {
-        $response = $this->makeRequest('POST', 'batch-status', [
+        list($statusCode, $data) = $this->makeRequest('POST', 'batch-status', [
             'batch_id' => $batchId,
         ]);
 
-        if ($response->getStatusCode() != 200) {
-            throw new Exception("Error get batch status! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
-        }
-
-        $raw = (string)$response->getBody();
-        $json = json_decode($raw, true);
-
-        return $json;
+        return $data;
     }
 
     public function getBatchResult($batchId)
     {
-        $response = $this->makeRequest('POST', 'batch-result', [
+        list($statusCode, $data) = $this->makeRequest('POST', 'batch-result', [
             'batch_id' => $batchId,
         ]);
 
-        if ($response->getStatusCode() != 200) {
-            throw new Exception("Error get batch result! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
-        }
-
-        $raw = (string)$response->getBody();
-        $json = json_decode($raw, true);
-
-        return $json;
+        return $data;
     }
 
     public function getCredits()
     {
-        $response = $this->makeRequest('GET', 'get-credits');
+        list($statusCode, $data) = $this->makeRequest('GET', 'get-credits');
 
-        if ($response->getStatusCode() != 200) {
-            throw new Exception("Error get batch result! {$response->getStatusCode()}, {$response->getReasonPhrase()}");
-        }
-
-        $raw = (string) $response->getBody();
-        $json = json_decode($raw, true);
-
-        return $json;
+        return $data;
     }
 }

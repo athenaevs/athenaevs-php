@@ -19,18 +19,22 @@ final class General extends TestCase
     {
         $client = new Client($api = 'xxxx');
 
-        $response = $client->testApi();
+        try {
+            $statusCode = $client->testApi();
 
-        $this->assertTrue($response->getStatusCode() == 403 );
+            $this->fail('Expected exception was not thrown.');
+        } catch (\Exception $e) {
+            $this->assertStringContainsString('API Key is not valid', $e->getMessage());
+        }
     }
 
     public function testAttemptWithValidKey()
     {
         $client = new Client($api = $this->apiKey);
 
-        $response = $client->testApi();
+        $statusCode = $client->testApi();
 
-        $this->assertTrue($response->getStatusCode() == 200 );
+        $this->assertTrue($statusCode == 200 );
     }
 
     public function testVerifyASingleEmailAddress(): void
