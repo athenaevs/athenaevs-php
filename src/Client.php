@@ -9,20 +9,27 @@ class Client
 {
     protected $apiKey;
     protected $client;
+    protected $enpoint;
 
-    // const BASE_URI = 'http://em.com/api/v1/'; // local
-    const BASE_URI = 'https://athenaevs.com/api/v1/';
+    // const DEFAULT_ENPOINT = 'http://em.com/api/v1/'; // local
+    const DEFAULT_ENPOINT = 'https://app.emailevs.com/api/v1/';
 
-    public function __construct($apiKey)
+    public function __construct($apiKey, $enpoint=null)
     {
         $this->apiKey = $apiKey;
+
+        if ($enpoint) {
+            $this->enpoint = $enpoint;
+        } else {
+            $this->enpoint = static::DEFAULT_ENPOINT;
+        }
     }
 
     private function getClient()
     {
         if (!$this->client) {
             $this->client = new GuzzleClient([
-                'base_uri' => static::BASE_URI,
+                'base_uri' => $this->enpoint,
                 'verify' => false,
                 'headers' => [
                     // 'Content-Type' => 'application/json',
