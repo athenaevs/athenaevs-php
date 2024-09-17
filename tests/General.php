@@ -2,17 +2,24 @@
 
 use PHPUnit\Framework\TestCase;
 use AthenaEvs\Client;
+use AthenaEvs\ClientPublic;
 
 final class General extends TestCase
 {
     private $batchId;
 
     // public $apiKey = 'cgunm52cx4h1bs6q6rqtto47w7vkh'; // Local
-    public $apiKey = '2fqy45mts72m1a2uopqbx1rnlaw97'; // AthenaEVS
+    // public $apiKey = '2fqy45mts72m1a2uopqbx1rnlaw97'; // AthenaEVS
+    public $apiKey = 'vhbp8f6y8r7s5a6jwav6b3c52ztj6'; // EmailEVS
 
     private function getClient()
     {
         return new Client($this->apiKey); // local
+    }
+
+    private function getClientPublic()
+    {
+        return new ClientPublic(); // local
     }
 
     public function testAttemptWithInvalidKey()
@@ -101,5 +108,17 @@ final class General extends TestCase
         $response = $this->getClient()->getCredits();
 
         $this->assertTrue( array_key_exists('credits', $response) );
+    }
+
+    public function testGetPlans()
+    {
+        $plans = $this->getClientPublic()->getPlans();
+
+        // $this->assertTrue( is_array($response) );
+
+        foreach ($plans as $plan) {
+            $this->assertArrayHasKey('uid', $plan, 'The child array is missing the "uid" key.');
+            $this->assertArrayHasKey('name', $plan, 'The child array is missing the "name" key.');
+        }
     }
 }
