@@ -112,9 +112,7 @@ final class General extends TestCase
 
     public function testGetPlans()
     {
-        $plans = $this->getClientPublic()->getPlans();
-
-        // $this->assertTrue( is_array($response) );
+        $plans = $this->getClientPublic()->getPlans('USD');
 
         foreach ($plans as $plan) {
             $this->assertArrayHasKey('uid', $plan, 'The child array is missing the "uid" key.');

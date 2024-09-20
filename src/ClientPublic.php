@@ -101,9 +101,11 @@ class ClientPublic
         }
     }
 
-    public function getPlans()
+    public function getPlans($currencyCode=null)
     {
-        list($statusCode, $data) = $this->makeRequest('GET', 'plans/available', []);
+        list($statusCode, $data) = $this->makeRequest('GET', 'plans/available', [
+            'currency_code' => $currencyCode,
+        ]);
 
         return $data;
     }
