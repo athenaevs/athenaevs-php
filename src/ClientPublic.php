@@ -1,23 +1,21 @@
 <?php
 
-namespace AthenaEVS;
+namespace AthenaEVS; // http://acelle.com/api/v1/public/plans/available
 
 use GuzzleHttp\Client as GuzzleClient;
 use Exception;
 
-class Client
+class ClientPublic
 {
-    protected $apiKey;
     protected $client;
     protected $enpoint;
 
-    // const DEFAULT_ENPOINT = 'http://em.com/api/v1/'; // local
-    const DEFAULT_ENPOINT = 'https://app.emailevs.com/api/v1/';
+    // const DEFAULT_ENPOINT = 'http://em.com/api/v1/public/'; // local
+    const DEFAULT_ENPOINT = 'https://app.emailevs.com/api/v1/public/';
+    // const DEFAULT_ENPOINT = 'http://acelle.com/api/v1/public/';
 
-    public function __construct($apiKey, $enpoint=null)
+    public function __construct($enpoint=null)
     {
-        $this->apiKey = $apiKey;
-
         if ($enpoint) {
             $this->enpoint = $enpoint;
         } else {
@@ -45,16 +43,11 @@ class Client
     {
         $client = $this->getClient();
 
-        // API key
-        $params = array_merge($params, [
-            'api_key' => $this->apiKey,
-        ]);
-
         //
         try {
             $options = [
                 'headers' => [
-                    'Authorization' => "Bearer {$this->apiKey}",
+                    // 'Authorization' => "Bearer {$this->apiKey}",
                     'Accept' => 'application/json',
                 ],
             ];
@@ -108,52 +101,11 @@ class Client
         }
     }
 
-    public function testApi()
+    public function getPlans($currencyCode=null)
     {
-        list($statusCode, $data) = $this->makeRequest('GET', 'test', []);
-
-        return $statusCode;
-    }
-
-    public function verify($email)
-    {
-        list($statusCode, $data) = $this->makeRequest('POST', 'verify', [
-            'email' => $email,
+        list($statusCode, $data) = $this->makeRequest('GET', 'plans/available', [
+            'currency_code' => $currencyCode,
         ]);
-
-        return $data;
-    }
-
-    public function batchVerify(array $emails)
-    {
-        list($statusCode, $data) = $this->makeRequest('POST', 'batch-verify', [
-            'emails' => $emails,
-        ]);
-
-        return $data;
-    }
-    
-    public function getBatchStatus($batchId)
-    {
-        list($statusCode, $data) = $this->makeRequest('POST', 'batch-status', [
-            'batch_id' => $batchId,
-        ]);
-
-        return $data;
-    }
-
-    public function getBatchResult($batchId)
-    {
-        list($statusCode, $data) = $this->makeRequest('POST', 'batch-result', [
-            'batch_id' => $batchId,
-        ]);
-
-        return $data;
-    }
-
-    public function getCredits()
-    {
-        list($statusCode, $data) = $this->makeRequest('GET', 'get-credits');
 
         return $data;
     }
